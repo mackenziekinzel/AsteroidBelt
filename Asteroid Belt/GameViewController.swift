@@ -17,7 +17,6 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         let filePath = Bundle.main.path(forResource: "game_loop", ofType: "mp3")
         let audioNSURL = URL(fileURLWithPath: filePath!)
         
@@ -26,7 +25,6 @@ class GameViewController: UIViewController {
         
         backingAudio.numberOfLoops = -1
         backingAudio.play()
-        
         
         let scene = MainMenuScene(size: CGSize(width: 1536, height: 2048))
         

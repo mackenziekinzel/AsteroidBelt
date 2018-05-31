@@ -25,25 +25,18 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
 var gameScore = 0
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var levelNumber = 0
-    
     var livesNumber = 3
     
     let livesLabel = SKLabelNode(fontNamed: "Aero")
-    
     let scoreLabel = SKLabelNode(fontNamed: "Aero")
-    
     let player = SKSpriteNode(imageNamed: "playerShip")
-    
     let bulletSound = SKAction.playSoundFileNamed("bulletSoundEffect.wav", waitForCompletion: false)
-    
     let explosionSound = SKAction.playSoundFileNamed("explosionSoundEffect.wav", waitForCompletion: false)
-    
     let tapToBeginLabel = SKLabelNode(fontNamed: "Aero")
     
     enum gameState {
@@ -61,10 +54,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         static let Enemy : UInt32 = 0b100 //4
     }
     
-    
     func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
+    
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
     }
@@ -72,14 +65,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let gameArea: CGRect
     
     override init(size: CGSize) {
-        
         let maxAspectRatio: CGFloat = 16.0/9.0
         let playableWidth = size.height / maxAspectRatio
         let margin = (size.width - playableWidth) / 2
         gameArea = CGRect(x: margin, y: 0, width: playableWidth, height: size.height)
         
         super.init(size: size)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -93,9 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
-        
         for i in 0...1{
-            
             let background = SKSpriteNode(imageNamed: "background")
             background.size = self.size
             background.anchorPoint = CGPoint(x: 0.5, y: 0)
@@ -103,7 +92,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.zPosition = 0
             background.name = "Background"
             self.addChild(background)
-            
         }
         
         player.setScale(0.5)
@@ -146,7 +134,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let fadeInAction = SKAction.fadeIn(withDuration: 0.5)
         tapToBeginLabel.run(fadeInAction)
-        
     }
     
     var lastUpdateTime: TimeInterval = 0
@@ -179,7 +166,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startGame(){
-        
         currentGameState = gameState.inGame
         
         let fadeOutAction = SKAction.fadeOut(withDuration: 0.5)
@@ -191,11 +177,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let startLevelAction = SKAction.run(startNewLevel)
         let startGameSequence = SKAction.sequence([moveShipOntoScreenAction, startLevelAction])
         player.run(startGameSequence)
-        
     }
     
     func loseALife(){
-        
         livesNumber -= 1
         livesLabel.text = "Lives: \(livesNumber)"
         
@@ -205,26 +189,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         livesLabel.run(scaleSequence)
         
         //if lives == 2 or lives == 1, game continues
-        
         if livesNumber == 0{
             runGameOver()
         }
-        
     }
     
     func addScore(){
-        
         gameScore += 1
         scoreLabel.text = "Score: \(gameScore)"
         
         if gameScore == 10 || gameScore == 25 || gameScore == 50{
             startNewLevel()
         }
-        
     }
     
     func startNewLevel(){
-        
         levelNumber += 1
         
         if self.action(forKey: "spawningEnemies") != nil{
@@ -248,11 +227,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let spawnSequence = SKAction.sequence([waitToSpawn, spawn])
         let spawnForever = SKAction.repeatForever(spawnSequence)
         self.run(spawnForever, withKey: "spawningEnemies")
-        
     }
     
     func runGameOver(){
-        
         currentGameState = gameState.afterGame
         
         self.removeAllActions()
@@ -274,16 +251,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func changeScene(){
-        
         let sceneToMoveTo = GameOverScene(size: self.size)
         sceneToMoveTo.scaleMode = self.scaleMode
         let myTransition = SKTransition.fade(withDuration: 0.5)
         self.view!.presentScene(sceneToMoveTo, transition: myTransition)
-        
     }
     
     func fireBullet() {
-        
         let bullet = SKSpriteNode(imageNamed: "bullet")
         bullet.name = "Bullet"
         bullet.setScale(0.2)
@@ -300,11 +274,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let deleteBullet = SKAction.removeFromParent()
         let bulletSequence = SKAction.sequence([bulletSound, moveBullet, deleteBullet])
         bullet.run(bulletSequence)
-        
     }
     
     func spawnEnemy(){
-        
         let randomXStart = random(min: gameArea.minX, max: gameArea.maxX)
         let randomXEnd = random(min: gameArea.minX, max: gameArea.maxX)
         
@@ -335,12 +307,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let dy = endPoint.y - startPoint.y
         let amountToRotate = atan2(dy, dx)
         enemy.zRotation = amountToRotate
-        
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         if currentGameState == gameState.preGame{
             startGame()
         }
@@ -351,7 +321,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         for touch: AnyObject in touches{
             
             let pointOfTouch = touch.location(in: self)
@@ -370,13 +339,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if player.position.x < gameArea.minX + player.size.width/2{
                 player.position.x = gameArea.minX + player.size.width/2
             }
-            
         }
-        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        
         var body1 = SKPhysicsBody()
         var body2 = SKPhysicsBody()
         
@@ -399,7 +365,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             body2.node?.removeFromParent()
-            
         }
         
         if body1.categoryBitMask == PhysicsCategories.Bullet && body2.categoryBitMask == PhysicsCategories.Enemy && body2.node?.position.y < self.size.height{
@@ -413,13 +378,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             body1.node?.removeFromParent()
             body2.node?.removeFromParent()
-            
         }
-        
     }
     
     func spawnExplosion(_ spawnPosition: CGPoint){
-        
         let explosion = SKSpriteNode(imageNamed: "explosion")
         explosion.position = spawnPosition
         explosion.zPosition = 3
@@ -433,7 +395,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let explosionSequence = SKAction.sequence([explosionSound, scaleIn, fadeOut, delete])
         
         explosion.run(explosionSequence)
-        
     }
-    
 }

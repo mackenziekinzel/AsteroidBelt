@@ -7,13 +7,11 @@
 //
 
 import Foundation
-
 import SpriteKit
 
-class MainMenuScene: SKScene{
+class MainMenuScene: SKScene {
     
     override func didMove(to view: SKView) {
-        
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         background.zPosition = 0
@@ -46,7 +44,6 @@ class MainMenuScene: SKScene{
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         for touch: AnyObject in touches{
             
             let pointOfTouch = touch.location(in: self)
@@ -59,9 +56,6 @@ class MainMenuScene: SKScene{
                 let myTransition = SKTransition.fade(withDuration: 0.5)
                 self.view!.presentScene(sceneToMoveTo, transition: myTransition)
             }
-            
         }
-        
     }
-    
 }
