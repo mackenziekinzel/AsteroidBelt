@@ -7,7 +7,7 @@
 //
 
 //add three more enemies, rename them asteroids ???
-//extra life power up, extra points power up ???
+//extra life power up & extra points power up ???
 //add more options on main menu & game over ???
 
 
@@ -32,7 +32,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var levelNumber = 0
     
-    var livesNumber = 5
+    var livesNumber = 3
     
     let livesLabel = SKLabelNode(fontNamed: "Aero")
     
@@ -77,7 +77,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let playableWidth = size.height / maxAspectRatio
         let margin = (size.width - playableWidth) / 2
         gameArea = CGRect(x: margin, y: 0, width: playableWidth, height: size.height)
-        
         
         super.init(size: size)
         
@@ -416,7 +415,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             body2.node?.removeFromParent()
             
         }
-        
         
     }
     
